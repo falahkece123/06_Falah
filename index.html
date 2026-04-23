@@ -11,7 +11,161 @@
       font-family: 'Segoe UI', sans-serif;
       background: #f4f6f9;
       color: #1a1a2e;
-      padding: 2rem;
+      min-height: 100vh;
+    }
+
+    /* ── NAVBAR ── */
+    .navbar {
+      background: #fff;
+      border-bottom: 1px solid #e8eaf0;
+      padding: 0 2rem;
+      display: flex;
+      align-items: center;
+      gap: 0;
+      position: sticky;
+      top: 0;
+      z-index: 100;
+    }
+
+    .navbar-brand {
+      font-size: 15px;
+      font-weight: 700;
+      color: #1a1a2e;
+      padding: 16px 0;
+      margin-right: 2rem;
+      letter-spacing: -.3px;
+    }
+
+    .navbar-brand span { color: #7F77DD; }
+
+    .nav-link {
+      font-size: 13.5px;
+      font-weight: 500;
+      color: #888;
+      padding: 18px 14px;
+      cursor: pointer;
+      border-bottom: 2px solid transparent;
+      transition: color .15s, border-color .15s;
+      user-select: none;
+    }
+
+    .nav-link:hover { color: #1a1a2e; }
+
+    .nav-link.active {
+      color: #7F77DD;
+      border-bottom-color: #7F77DD;
+    }
+
+    /* ── PAGE WRAPPER ── */
+    .page { display: none; padding: 2rem; }
+    .page.active { display: block; }
+
+    /* ── BERANDA ── */
+    .hero {
+      background: linear-gradient(135deg, #7F77DD 0%, #534AB7 100%);
+      border-radius: 16px;
+      padding: 2.5rem 2rem;
+      color: #fff;
+      margin-bottom: 2rem;
+    }
+
+    .hero h1 {
+      font-size: 26px;
+      font-weight: 700;
+      margin-bottom: 8px;
+    }
+
+    .hero p {
+      font-size: 14px;
+      opacity: .85;
+      line-height: 1.6;
+      max-width: 520px;
+    }
+
+    .hero-btn {
+      display: inline-block;
+      margin-top: 18px;
+      background: #fff;
+      color: #534AB7;
+      font-size: 13px;
+      font-weight: 600;
+      padding: 9px 20px;
+      border-radius: 8px;
+      cursor: pointer;
+      border: none;
+      transition: opacity .15s;
+    }
+
+    .hero-btn:hover { opacity: .88; }
+
+    .stat-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(130px, 1fr));
+      gap: 12px;
+      margin-bottom: 2rem;
+    }
+
+    .stat-card {
+      background: #fff;
+      border: 1px solid #e8eaf0;
+      border-radius: 14px;
+      padding: 18px 16px;
+      text-align: center;
+    }
+
+    .stat-number {
+      font-size: 28px;
+      font-weight: 700;
+      color: #7F77DD;
+    }
+
+    .stat-label {
+      font-size: 12px;
+      color: #888;
+      margin-top: 4px;
+    }
+
+    .beranda-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 16px;
+      margin-bottom: 2rem;
+    }
+
+    @media(max-width: 600px) { .beranda-grid { grid-template-columns: 1fr; } }
+
+    .info-card {
+      background: #fff;
+      border: 1px solid #e8eaf0;
+      border-radius: 14px;
+      padding: 18px 20px;
+    }
+
+    .info-card h3 {
+      font-size: 14px;
+      font-weight: 600;
+      margin-bottom: 10px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .icon-dot {
+      width: 10px; height: 10px;
+      border-radius: 50%;
+      display: inline-block;
+    }
+
+    .info-card ul {
+      list-style: none;
+      font-size: 13px;
+      color: #555;
+      line-height: 2;
+    }
+
+    .info-card ul li::before {
+      content: "→ ";
+      color: #7F77DD;
     }
 
     h1 {
@@ -229,7 +383,58 @@
 </head>
 <body>
 
-<h1>DRY Render Demo</h1>
+<!-- NAVBAR -->
+<nav class="navbar">
+  <div class="navbar-brand">DRY<span>App</span></div>
+  <div class="nav-link active" onclick="showPage('beranda', this)">🏠 Beranda</div>
+  <div class="nav-link" onclick="showPage('array', this)">Array</div>
+  <div class="nav-link" onclick="showPage('cards', this)">Cards</div>
+  <div class="nav-link" onclick="showPage('list', this)">List</div>
+  <div class="nav-link" onclick="showPage('menu', this)">Menu</div>
+  <div class="nav-link" onclick="showPage('table', this)">Table</div>
+</nav>
+
+<!-- PAGE: BERANDA -->
+<div class="page active" id="page-beranda">
+  <div class="hero">
+    <h1>Selamat Datang di DRY App 👋</h1>
+    <p>Aplikasi demo yang menampilkan 9 data anggota tim menggunakan prinsip DRY, Reuse, Modular, dan Scalable. Semua tampilan dirender dari satu sumber data.</p>
+    <button class="hero-btn" onclick="showPage('cards', document.querySelector('.nav-link:nth-child(3)'))">Lihat Cards →</button>
+  </div>
+
+  <div class="stat-grid" id="beranda-stats"></div>
+
+  <div class="beranda-grid">
+    <div class="info-card">
+      <h3><span class="icon-dot" style="background:#7F77DD"></span> Prinsip Kode</h3>
+      <ul>
+        <li>DRY — data ditulis sekali</li>
+        <li>Reuse — fungsi render dipakai ulang</li>
+        <li>Modular — tiap komponen mandiri</li>
+        <li>Scalable — mudah ditambah data baru</li>
+      </ul>
+    </div>
+    <div class="info-card">
+      <h3><span class="icon-dot" style="background:#1D9E75"></span> Komponen Tersedia</h3>
+      <ul>
+        <li>Array — sumber data tunggal</li>
+        <li>Cards — tampilan kartu anggota</li>
+        <li>List — daftar nama & divisi</li>
+        <li>Menu — navigasi nama</li>
+        <li>Table — tabel lengkap dengan status</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="info-card">
+    <h3><span class="icon-dot" style="background:#D85A30"></span> Anggota Terbaru</h3>
+    <div id="beranda-recent" style="margin-top:10px"></div>
+  </div>
+</div>
+
+<!-- PAGE: ARRAY -->
+<div class="page" id="page-array">
+<h1>Array Data</h1>
 <p class="subtitle">9 data dirender dari 1 array — prinsip DRY, Reuse, Modular, Scalable</p>
 
 <div class="section">
@@ -246,24 +451,40 @@
   <div class="section-title">Array data (sumber tunggal)</div>
   <div class="array-display" id="array-display"></div>
 </div>
+</div><!-- end page-array -->
 
+<!-- PAGE: CARDS -->
+<div class="page" id="page-cards">
+<h1>Cards</h1>
+<p class="subtitle">Tampilan kartu untuk setiap anggota tim</p>
 <div class="section">
-  <div class="section-title">Cards</div>
   <div class="card-grid" id="cards"></div>
 </div>
+</div>
 
+<!-- PAGE: LIST -->
+<div class="page" id="page-list">
+<h1>List</h1>
+<p class="subtitle">Daftar nama dan divisi seluruh anggota</p>
 <div class="section">
-  <div class="section-title">List</div>
   <ul class="list" id="list"></ul>
 </div>
-
-<div class="section">
-  <div class="section-title">Menu</div>
-  <nav class="menu" id="menu"></nav>
 </div>
 
+<!-- PAGE: MENU -->
+<div class="page" id="page-menu">
+<h1>Menu</h1>
+<p class="subtitle">Navigasi berdasarkan nama anggota</p>
 <div class="section">
-  <div class="section-title">Table</div>
+  <nav class="menu" id="menu"></nav>
+</div>
+</div>
+
+<!-- PAGE: TABLE -->
+<div class="page" id="page-table">
+<h1>Table</h1>
+<p class="subtitle">Tabel lengkap semua anggota beserta status</p>
+<div class="section">
   <div class="table-wrap">
     <table class="tbl">
       <thead>
@@ -278,8 +499,19 @@
     </table>
   </div>
 </div>
+</div>
 
 <script>
+  // ============================================================
+  // ROUTING — fungsi ganti halaman
+  // ============================================================
+  function showPage(name, el) {
+    document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+    document.querySelectorAll('.nav-link').forEach(n => n.classList.remove('active'));
+    document.getElementById('page-' + name).classList.add('active');
+    if (el) el.classList.add('active');
+  }
+
   // ============================================================
   // DATA — satu-satunya tempat data ditulis (prinsip DRY)
   // ============================================================
@@ -368,10 +600,51 @@
   }
 
   // ============================================================
+  // RENDER BERANDA — statistik & recent members
+  // ============================================================
+  function renderBerandaStats() {
+    const total = data.length;
+    const aktif = data.filter(d => d.status === "aktif").length;
+    const divisi = [...new Set(data.map(d => d.divisi))].length;
+    const stats = [
+      { number: total,  label: "Total Anggota" },
+      { number: aktif,  label: "Status Aktif"  },
+      { number: divisi, label: "Divisi"         },
+      { number: 1,      label: "Proyek Aktif"   },
+    ];
+    document.getElementById("beranda-stats").innerHTML =
+      stats.map(s => `
+        <div class="stat-card">
+          <div class="stat-number">${s.number}</div>
+          <div class="stat-label">${s.label}</div>
+        </div>`).join("");
+  }
+
+  function renderBerandaRecent() {
+    const recent = data.slice(-3).reverse();
+    document.getElementById("beranda-recent").innerHTML =
+      recent.map((d, i) => {
+        const av = avatarColors[data.indexOf(d)];
+        const sc = statusStyle(d.status);
+        return `
+          <div style="display:flex;align-items:center;gap:12px;padding:8px 0;border-bottom:${i<2?'1px solid #f0f0f0':'none'}">
+            <div style="width:34px;height:34px;border-radius:50%;background:${av.bg};color:${av.txt};display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:600;flex-shrink:0">${initials(d.nama)}</div>
+            <div style="flex:1">
+              <div style="font-size:13.5px;font-weight:600">${d.nama}</div>
+              <div style="font-size:12px;color:#888">${d.divisi}</div>
+            </div>
+            <span style="background:${sc.bg};color:${sc.txt};font-size:11px;font-weight:500;padding:3px 10px;border-radius:999px">${d.status}</span>
+          </div>`;
+      }).join("");
+  }
+
+  // ============================================================
   // MOUNT — satu tempat render semua komponen (scalable)
   // ============================================================
   function mount() {
     renderArrayDisplay();
+    renderBerandaStats();
+    renderBerandaRecent();
     document.getElementById("cards").innerHTML      = data.map(renderCard).join("");
     document.getElementById("list").innerHTML       = data.map(renderListItem).join("");
     document.getElementById("menu").innerHTML       = data.map(renderMenuItem).join("");
