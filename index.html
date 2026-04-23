@@ -1,1 +1,384 @@
-hi
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>DRY Render Demo - Array, Card, List, Menu, Table</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: 'Segoe UI', sans-serif;
+      background: #f4f6f9;
+      color: #1a1a2e;
+      padding: 2rem;
+    }
+
+    h1 {
+      font-size: 22px;
+      font-weight: 600;
+      margin-bottom: 0.25rem;
+    }
+
+    .subtitle {
+      font-size: 14px;
+      color: #666;
+      margin-bottom: 2rem;
+    }
+
+    .section {
+      margin-bottom: 2.5rem;
+    }
+
+    .section-title {
+      font-size: 12px;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: .08em;
+      color: #888;
+      margin-bottom: 12px;
+    }
+
+    /* Array display */
+    .array-display {
+      background: #1e1e2e;
+      color: #cdd6f4;
+      border-radius: 10px;
+      padding: 16px 20px;
+      font-family: 'Courier New', monospace;
+      font-size: 12.5px;
+      line-height: 1.7;
+      white-space: pre-wrap;
+      overflow-x: auto;
+    }
+
+    /* Cards */
+    .card-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+      gap: 12px;
+    }
+
+    .card {
+      background: #fff;
+      border: 1px solid #e8eaf0;
+      border-radius: 14px;
+      padding: 16px;
+      transition: box-shadow .2s, transform .2s;
+    }
+
+    .card:hover {
+      box-shadow: 0 4px 16px rgba(0,0,0,0.08);
+      transform: translateY(-2px);
+    }
+
+    .card-avatar {
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 13px;
+      font-weight: 600;
+      margin-bottom: 10px;
+    }
+
+    .card-name {
+      font-size: 14px;
+      font-weight: 600;
+    }
+
+    .card-role {
+      font-size: 12px;
+      color: #888;
+      margin-top: 2px;
+    }
+
+    .badge {
+      display: inline-block;
+      font-size: 11px;
+      font-weight: 500;
+      padding: 3px 10px;
+      border-radius: 999px;
+      margin-top: 8px;
+    }
+
+    /* List */
+    ul.list {
+      list-style: none;
+      background: #fff;
+      border: 1px solid #e8eaf0;
+      border-radius: 14px;
+      overflow: hidden;
+    }
+
+    ul.list li {
+      padding: 11px 18px;
+      border-bottom: 1px solid #f0f0f0;
+      font-size: 14px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    ul.list li:last-child { border-bottom: none; }
+
+    ul.list li:hover { background: #f9fafb; }
+
+    .dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      flex-shrink: 0;
+    }
+
+    .list-divisi {
+      margin-left: auto;
+      font-size: 12px;
+      color: #999;
+    }
+
+    /* Menu */
+    nav.menu {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      background: #fff;
+      border: 1px solid #e8eaf0;
+      border-radius: 14px;
+      padding: 14px 16px;
+    }
+
+    nav.menu button {
+      font-size: 13px;
+      font-weight: 500;
+      padding: 7px 16px;
+      border-radius: 8px;
+      border: 1px solid #e0e4ef;
+      background: #f4f6f9;
+      color: #1a1a2e;
+      cursor: pointer;
+      transition: background .15s, border-color .15s;
+    }
+
+    nav.menu button:hover {
+      background: #e8eaf0;
+      border-color: #c8ccdb;
+    }
+
+    nav.menu button:active {
+      transform: scale(0.97);
+    }
+
+    /* Table */
+    .table-wrap {
+      background: #fff;
+      border: 1px solid #e8eaf0;
+      border-radius: 14px;
+      overflow: hidden;
+    }
+
+    table.tbl {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 13.5px;
+    }
+
+    table.tbl th {
+      text-align: left;
+      padding: 10px 16px;
+      background: #f7f8fc;
+      font-weight: 600;
+      font-size: 12px;
+      color: #888;
+      text-transform: uppercase;
+      letter-spacing: .05em;
+    }
+
+    table.tbl td {
+      padding: 10px 16px;
+      border-top: 1px solid #f0f0f0;
+    }
+
+    table.tbl tr:hover td {
+      background: #f9fafb;
+    }
+
+    .tag {
+      display: inline-block;
+      padding: 3px 10px;
+      border-radius: 999px;
+      font-size: 11.5px;
+      font-weight: 500;
+    }
+
+    /* DRY note */
+    .dry-note {
+      background: #fff;
+      border-left: 4px solid #7F77DD;
+      border-radius: 0 10px 10px 0;
+      padding: 14px 18px;
+      font-size: 13px;
+      line-height: 1.7;
+      color: #444;
+    }
+
+    .dry-note strong { color: #1a1a2e; }
+  </style>
+</head>
+<body>
+
+<h1>DRY Render Demo</h1>
+<p class="subtitle">9 data dirender dari 1 array — prinsip DRY, Reuse, Modular, Scalable</p>
+
+<div class="section">
+  <div class="section-title">Prinsip yang diterapkan</div>
+  <div class="dry-note">
+    <strong>DRY</strong> — data hanya ditulis sekali di array. &nbsp;|&nbsp;
+    <strong>Reuse</strong> — setiap fungsi render dipakai ulang via <code>data.map()</code>. &nbsp;|&nbsp;
+    <strong>Modular</strong> — setiap tampilan terpisah, bisa diubah mandiri. &nbsp;|&nbsp;
+    <strong>Scalable</strong> — tambah data ke-10 cukup tambah 1 baris di array, semua tampilan otomatis ikut.
+  </div>
+</div>
+
+<div class="section">
+  <div class="section-title">Array data (sumber tunggal)</div>
+  <div class="array-display" id="array-display"></div>
+</div>
+
+<div class="section">
+  <div class="section-title">Cards</div>
+  <div class="card-grid" id="cards"></div>
+</div>
+
+<div class="section">
+  <div class="section-title">List</div>
+  <ul class="list" id="list"></ul>
+</div>
+
+<div class="section">
+  <div class="section-title">Menu</div>
+  <nav class="menu" id="menu"></nav>
+</div>
+
+<div class="section">
+  <div class="section-title">Table</div>
+  <div class="table-wrap">
+    <table class="tbl">
+      <thead>
+        <tr>
+          <th>#</th>
+          <th>Nama</th>
+          <th>Divisi</th>
+          <th>Status</th>
+        </tr>
+      </thead>
+      <tbody id="table-body"></tbody>
+    </table>
+  </div>
+</div>
+
+<script>
+  // ============================================================
+  // DATA — satu-satunya tempat data ditulis (prinsip DRY)
+  // ============================================================
+  const data = [
+    { id: 1, nama: "Andi Pratama",    divisi: "Frontend",  status: "aktif"  },
+    { id: 2, nama: "Budi Santoso",    divisi: "Backend",   status: "aktif"  },
+    { id: 3, nama: "Citra Dewi",      divisi: "UI/UX",     status: "aktif"  },
+    { id: 4, nama: "Dian Kusuma",     divisi: "DevOps",    status: "cuti"   },
+    { id: 5, nama: "Eko Raharjo",     divisi: "QA",        status: "aktif"  },
+    { id: 6, nama: "Fitri Handayani", divisi: "Backend",   status: "aktif"  },
+    { id: 7, nama: "Gilang Saputra",  divisi: "Frontend",  status: "magang" },
+    { id: 8, nama: "Hani Lestari",    divisi: "UI/UX",     status: "aktif"  },
+    { id: 9, nama: "Ivan Nugroho",    divisi: "DevOps",    status: "aktif"  },
+  ];
+
+  // ============================================================
+  // HELPER FUNCTIONS — reusable utilities
+  // ============================================================
+  const initials = nama => nama.split(" ").map(w => w[0]).slice(0, 2).join("");
+
+  const avatarColors = [
+    { bg: "#B5D4F4", txt: "#0C447C" },
+    { bg: "#9FE1CB", txt: "#085041" },
+    { bg: "#F5C4B3", txt: "#993C1D" },
+    { bg: "#F4C0D1", txt: "#72243E" },
+    { bg: "#C0DD97", txt: "#3B6D11" },
+    { bg: "#FAC775", txt: "#854F0B" },
+    { bg: "#CECBF6", txt: "#3C3489" },
+    { bg: "#9FE1CB", txt: "#085041" },
+    { bg: "#F0997B", txt: "#712B13" },
+  ];
+
+  const statusStyle = s => ({
+    aktif:  { bg: "#EAF3DE", txt: "#3B6D11" },
+    cuti:   { bg: "#FAEEDA", txt: "#854F0B" },
+    magang: { bg: "#FBEAF0", txt: "#993556" },
+  }[s] || { bg: "#eee", txt: "#555" });
+
+  // ============================================================
+  // RENDER FUNCTIONS — masing-masing modular & reusable
+  // ============================================================
+
+  function renderArrayDisplay() {
+    const lines = data.map(d =>
+      `  { id: ${d.id}, nama: "${d.nama}", divisi: "${d.divisi}", status: "${d.status}" }`
+    ).join(",\n");
+    document.getElementById("array-display").textContent =
+      `const data = [\n${lines}\n];`;
+  }
+
+  function renderCard(d, i) {
+    const av = avatarColors[i];
+    const sc = statusStyle(d.status);
+    return `
+      <div class="card">
+        <div class="card-avatar" style="background:${av.bg};color:${av.txt}">${initials(d.nama)}</div>
+        <div class="card-name">${d.nama}</div>
+        <div class="card-role">${d.divisi}</div>
+        <span class="badge" style="background:${sc.bg};color:${sc.txt}">${d.status}</span>
+      </div>`;
+  }
+
+  function renderListItem(d, i) {
+    const av = avatarColors[i];
+    return `
+      <li>
+        <span class="dot" style="background:${av.bg};outline:2px solid ${av.txt}22"></span>
+        <span>${d.nama}</span>
+        <span class="list-divisi">${d.divisi}</span>
+      </li>`;
+  }
+
+  function renderMenuItem(d) {
+    return `<button onclick="alert('Kamu memilih: ${d.nama}')">${d.nama}</button>`;
+  }
+
+  function renderTableRow(d) {
+    const sc = statusStyle(d.status);
+    return `
+      <tr>
+        <td style="color:#bbb;font-size:12px">${d.id}</td>
+        <td style="font-weight:600">${d.nama}</td>
+        <td style="color:#666">${d.divisi}</td>
+        <td><span class="tag" style="background:${sc.bg};color:${sc.txt}">${d.status}</span></td>
+      </tr>`;
+  }
+
+  // ============================================================
+  // MOUNT — satu tempat render semua komponen (scalable)
+  // ============================================================
+  function mount() {
+    renderArrayDisplay();
+    document.getElementById("cards").innerHTML      = data.map(renderCard).join("");
+    document.getElementById("list").innerHTML       = data.map(renderListItem).join("");
+    document.getElementById("menu").innerHTML       = data.map(renderMenuItem).join("");
+    document.getElementById("table-body").innerHTML = data.map(renderTableRow).join("");
+  }
+
+  mount();
+</script>
+</body>
+</html>
